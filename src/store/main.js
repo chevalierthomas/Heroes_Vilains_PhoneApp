@@ -1,10 +1,9 @@
-import {addTeamToOrg, createOrg, getOrgById, getOrgs, removeTeamFromOrg} from "@/services/org.services";
-import {addHeroesToTeam, createTeam, getTeams, removeHeroesFromTeam} from "@/services/team.services";
-import {createHero, getAllHeroes, updateHero} from "@/services/hero.services";
+import {addTeamToOrg, createOrg, getOrgById, getOrgs, removeTeamFromOrg} from "../services/org.services";
+import {addHeroesToTeam, createTeam, getTeams, removeHeroesFromTeam} from "../services/team.services";
+import {createHero, getAllHeroes, updateHero} from "../services/hero.services.js";
+
 import {defineStore} from "pinia";
-
 import {useErrorsStore} from "./errors.js";
-
 
 export const useMainStore = defineStore('main', {
 
@@ -21,6 +20,7 @@ export const useMainStore = defineStore('main', {
     }),
 
     actions: {
+
         async getAllOrgs() {
             try {
                 const orgs = await getOrgs();
@@ -105,7 +105,9 @@ export const useMainStore = defineStore('main', {
         async addTeamToCurrentOrg(newTeamToCurrentOrg) {
             try {
                 await addTeamToOrg(newTeamToCurrentOrg._id);
+
                 const currentOrg = await getOrgById(this.currentOrg._id);
+
                 console.log(currentOrg.data);
 
                 if (!currentOrg.error || currentOrg.error === 0) {

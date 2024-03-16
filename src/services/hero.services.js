@@ -1,4 +1,4 @@
-import { getRequest, postRequest, putRequest } from "@/services/axios.service";
+import { getRequest, postRequest, putRequest } from  "@/services/axios.services";
 
 // Fonctions interactant directement avec l'API pour les héros
 async function getAllHeroesFromAPI() {

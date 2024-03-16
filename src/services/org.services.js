@@ -1,4 +1,4 @@
-import { getRequest, postRequest, patchRequest } from "@/services/axios.service";
+import { getRequest, postRequest, patchRequest } from "@/services/axios.services";
 
 // Fonctions interactant directement avec l'API pour les organisations
 async function getOrgsFromAPI() {
@@ -11,14 +11,12 @@ async function createOrgFromAPI(orgData) {
 
 async function addTeamToOrgFromAPI(teamId) {
     let data = { idTeam: teamId };
-    // Ajouter org-secret dans l'URL
     return patchRequest(`/herocorp/orgs/addteam`, data, 'ADDTEAMTOORG');
 }
 
 
 async function removeTeamFromOrgFromAPI(teamId) {
     let data = { idTeam: teamId };
-    // Ajouter org-secret dans l'URL
     return patchRequest(`/herocorp/orgs/removeteam`, data, 'REMOVETEAMFROMORG');
 }
 

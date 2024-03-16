@@ -1,4 +1,4 @@
-import {postRequest, getRequest, putRequest} from "@/services/axios.service";
+import {postRequest, getRequest, putRequest} from "@/services/axios.services";
 
 // Fonction pour l'authentification d'un utilisateur
 async function signInWithAPI(userData) {

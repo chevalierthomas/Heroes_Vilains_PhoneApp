@@ -1,13 +1,8 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { defineStore } from 'pinia';
+import { getUserInfo, registerUser, signIn, updateHeroWithAuth } from "@/services/auth.services";
 
-import {getUserInfo, registerUser, signIn, updateHeroWithAuth} from "@/services/auth.services";
-
-Vue.use(Vuex);
-
-export default{
-    namespaced: true,
-    state: ({
+export const useSecretStore = defineStore('main', {
+    state: () => ({
         passwordOrg: "baba",
         auth: false,
         jwtToken: null,
@@ -16,107 +11,71 @@ export default{
         userInfo: null,
     }),
     getters: {
-        getUserInfoName: state => state.userInfo.login,
-        getUserInfoHero: state => state.userInfo.hero,
-    },
-    mutations: {
-        SET_PASSWORD_ORG(state, password) {
-            state.passwordOrg = password;
-        },
-        SET_AUTH(state, status) {
-            state.auth = status;
-        },
-        SET_JWT_TOKEN(state, token) {
-            state.jwtToken = token;
-        },
-        SET_XSRF_TOKEN(state, token) {
-            state.xsrfToken = token;
-        },
-        SET_REFRESH_TOKEN(state, token) {
-            state.refreshToken = token;
-        },
-        SET_USER_INFO(state, userInfo) {
-            state.userInfo = userInfo;
-        }
+        getUserInfoName: (state) => state.userInfo?.login,
+        getUserInfoHero: (state) => state.userInfo?.hero,
     },
     actions: {
-        async setPasswordOrg({ commit }, password) {
-            try {
-                commit('SET_PASSWORD_ORG', password);
-            } catch (error) {
-                console.error('Error fetching orgs:', error);
-            }
+        async setPasswordOrg(password) {
+            this.passwordOrg = password;
         },
 
-        async signIn({ commit }, userData) {
+        async signIn(userData) {
             try {
-                console.log('store')
-                console.log(userData)
+                console.log('store', userData);
                 const response = await signIn(userData);
 
-                console.log(response)
                 if (response.error === 0) {
-                    commit('SET_JWT_TOKEN', response.data.jwtToken);
-                    commit('SET_XSRF_TOKEN', response.data.xsrfToken);
-                    commit('SET_REFRESH_TOKEN', response.data.refreshToken);
-                    const response_user = await getUserInfo(userData.login);
+                    this.jwtToken = response.data.jwtToken;
+                    this.xsrfToken = response.data.xsrfToken;
+                    this.refreshToken = response.data.refreshToken;
+                    const responseUser = await getUserInfo(userData.login);
 
-                    console.log(response_user.data)
-                    if (response_user.error === 0) {
-                        commit('SET_USER_INFO', response_user.data);
+                    if (responseUser.error === 0) {
+                        this.userInfo = responseUser.data;
+                        this.auth = true;
                     } else {
-                        console.error('Erreur lors de la récupération des informations utilisateur:', response_user.data.data);
+                        console.error('Erreur lors de la récupération des informations utilisateur:', responseUser.data.data);
                     }
-
-                    commit('SET_AUTH', true);
                 } else {
-                    commit('errors/pushError', response.data.data, { root: true });
-
+                    // Utilisez ici votre gestion d'erreur, par exemple en définissant un autre store pour les erreurs.
+                    console.error('Erreur de connexion:', response.data.data);
                 }
             } catch (error) {
                 console.error('Erreur lors de la connexion:', error);
             }
         },
 
-
-        logoutUser({ commit }) {
-            commit('SET_AUTH', false);
-            commit('SET_JWT_TOKEN', null);
-            commit('SET_XSRF_TOKEN', null);
-            commit('SET_USER_INFO', null);
+        logoutUser() {
+            this.auth = false;
+            this.jwtToken = null;
+            this.xsrfToken = null;
+            this.userInfo = null;
             localStorage.removeItem('jwtToken');
             localStorage.removeItem('xsrfToken');
         },
 
+        async updateAuthHero(hero) {
+            hero._id = this.userInfo.hero._id;
 
-        async updateAuthHero({commit, state}, hero) {
-            hero._id = state.userInfo.hero._id;
-            
-            console.log("store");
-            await console.log(hero);
+            console.log("store", hero);
             const response = await updateHeroWithAuth(hero);
 
-            console.log(response);
             if (response.error === 0) {
-                commit('SET_USER_INFO', response.data);
+                this.userInfo = response.data;
             } else {
-                console.error('Erreur lors de la récupération des informations utilisateur:', response.data.data);
+                console.error('Erreur lors de la mise à jour des informations utilisateur:', response.data.data);
             }
         },
 
-        async registerUser({commit}, hero){
-            const response = await registerUser(hero)
-            console.log(response)
+        async registerUser(hero) {
+            const response = await registerUser(hero);
+            console.log(response);
 
             if (response.error === 0) {
-                commit('SET_USER_INFO', response.data);
+                this.userInfo = response.data;
             } else {
-                console.error('Erreur lors de la récupération des informations utilisateur:', response.data.data);
+                console.error("Erreur lors de l'enregistrement de l'utilisateur:", response.data.data);
             }
         }
-
     },
-
-    modules: {
-    }
-}
+});

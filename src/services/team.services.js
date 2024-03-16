@@ -1,4 +1,4 @@
-import { getRequest, postRequest, patchRequest } from "@/services/axios.service";
+import { getRequest, postRequest, patchRequest } from "@/services/axios.services";
 
 // Fonctions interactant directement avec l'API
 async function getTeamsFromAPI() {

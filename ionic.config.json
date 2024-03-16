@@ -1,7 +1,7 @@
-{
-  "name": "hereos",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "vue-vite"
-}
+  {
+    "name": "hereos",
+    "integrations": {
+      "capacitor": {}
+    },
+    "type": "vue-vite"
+  }

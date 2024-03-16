@@ -1,5 +1,6 @@
 import axios from 'axios'
-import store from "@/store";
+import { useSecretStore } from '@/store/secret'; // Assurez-vous que le chemin est correct
+import { useMainStore } from '@/store/main'; // Assurez-vous que le chemin est correct
 import Config from "@/commons/config";
 
 const axiosAgent = axios.create({
@@ -9,6 +10,8 @@ const axiosAgent = axios.create({
 
 axiosAgent.interceptors.request.use(config => {
   // Récupération de la phrase secrète directement depuis le store Vuex
+
+  /*
   const secretPhrase = store.state.secret.passwordOrg;
   const xsrfToken = store.state.secret.xsrfToken; // Assurez-vous que le chemin d'accès est correct
 
@@ -19,6 +22,9 @@ axiosAgent.interceptors.request.use(config => {
   if (xsrfToken) {
     config.headers['x-xsrf-token'] = xsrfToken;
   }
+
+  */
+
 
   return config;
 }, error => {
