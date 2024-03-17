@@ -8,32 +8,41 @@
       </ion-header>
       <ion-content>
         <ion-list>
+          <ion-item @click="() => navigateTo('home')">
+            <ion-label>Accueil</ion-label>
+          </ion-item>
 
-          <ion-item button :router-link="{ name: 'org' }">
+          <ion-item @click="() => navigateTo('org')">
             <ion-label>Organisations</ion-label>
           </ion-item>
-          <ion-item button :router-link="{ name: 'team' }">
+
+          <ion-item @click="() => navigateTo('team')">
             <ion-label>Équipes</ion-label>
           </ion-item>
-          <ion-item button :router-link="{ name: 'hero' }">
+
+          <ion-item @click="() => navigateTo('hero')">
             <ion-label>Héros</ion-label>
           </ion-item>
-          <template v-if="auth">
-            <ion-item button :router-link="{ name: 'UserAccount' }">
-              <ion-label>Espace Personnel</ion-label>
-            </ion-item>
-            <ion-item button @click="logout">
-              <ion-label color="danger">Déconnexion</ion-label>
-            </ion-item>
-          </template>
-          <template v-else>
-            <ion-item button :router-link="{ name: 'login' }">
-              <ion-label color="success">Authentification</ion-label>
-            </ion-item>
-            <ion-item button :router-link="{ name: 'register' }">
-              <ion-label color="secondary">Inscription</ion-label>
-            </ion-item>
-          </template>
+
+            <template v-if="auth">
+              <ion-item @click="() => navigateTo('UserAccount')">
+                <ion-label>Espace Personnel</ion-label>
+              </ion-item>
+              <ion-item @click="logout">
+                <ion-label color="danger">Déconnexion</ion-label>
+              </ion-item>
+            </template>
+
+            <!-- Éléments visibles lorsque l'utilisateur n'est pas authentifié -->
+            <template v-else>
+              <ion-item @click="() => navigateTo('login')">
+                <ion-label color="success">Authentification</ion-label>
+              </ion-item>
+              <ion-item @click="() => navigateTo('register')">
+                <ion-label color="secondary">Inscription</ion-label>
+              </ion-item>
+            </template>
+
         </ion-list>
       </ion-content>
     </ion-menu>
@@ -60,17 +69,22 @@
 </template>
 
 <script setup>
-import { IonApp, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent, IonMenu, IonList, IonItem, IonLabel, IonMenuButton,IonPage } from '@ionic/vue';
+import { useRouter } from 'vue-router';
+import { IonApp, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent, IonMenu, IonList, IonItem, IonLabel, IonMenuButton, IonPage } from '@ionic/vue';
 import { useSecretStore } from '@/store/secret.js';
-import { useMainStore } from '@/store/main';
 import { storeToRefs } from 'pinia';
 
+const router = useRouter();
 const secretStore = useSecretStore();
-const mainStore = useMainStore();
+const { auth } = storeToRefs(secretStore); // Cela permet à `auth` de rester réactif
+
 
 const logout = async () => {
   await secretStore.logoutUser();
 };
 
-const { auth } = storeToRefs(secretStore);
+const navigateTo = (routeName) => {
+  router.push({ name: routeName });
+};
 </script>
+

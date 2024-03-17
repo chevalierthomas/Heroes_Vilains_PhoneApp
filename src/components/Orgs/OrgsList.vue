@@ -42,7 +42,7 @@ const addOrgDialog = ref(false);
 const { orgs } = storeToRefs(mainStore);
 
 const loadData = async () => {
-  if (orgs.value.length === 0) {
+  if (orgs.length === 0) {
     await mainStore.getAllOrgs();
   }
 };
