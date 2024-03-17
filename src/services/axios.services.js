@@ -13,18 +13,18 @@ axiosAgent.interceptors.request.use(config => {
 
   const secretStore = useSecretStore();
   const passwordOrg = secretStore.passwordOrg;
+  const xsrfToken = secretStore.xsrfToken;
 
   if (passwordOrg) {
     config.headers['org-secret'] = passwordOrg;
   }
 
-  /*
 
   if (xsrfToken) {
     config.headers['x-xsrf-token'] = xsrfToken;
   }
 
-  */
+
 
 
   return config;

@@ -12,6 +12,7 @@ import '@ionic/vue/css/structure.css';
 import '@ionic/vue/css/typography.css';
 import '@ionic/vue/css/display.css'; // Optionnel
 
+
 app.use(IonicVue).use(router);
 app.use(createPinia());
 

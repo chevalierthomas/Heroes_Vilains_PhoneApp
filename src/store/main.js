@@ -92,7 +92,9 @@ export const useMainStore = defineStore('main', {
                 if (!team.error || team.error === 0) {
                     const { _id, name } = team.data;
                     const newTeam = {_id, name};
+
                     this.teams.push(newTeam);
+                    console.log(this.teams)
                 } else {
                     const errorStore = useErrorsStore();
                     errorStore.pushError(team.data.data);
@@ -211,7 +213,7 @@ export const useMainStore = defineStore('main', {
         async removeHeroesFromCurrentTeam(oldHeroesIds) {
             try {
                 console.log('store', oldHeroesIds);
-                const response = await removeHeroesFromTeam(state.currentTeam._id, oldHeroesIds);
+                const response = await removeHeroesFromTeam(this.currentTeam._id, oldHeroesIds);
                 if (!response.error || response.error === 0) {
                     this.currentTeam = response.data;
 
@@ -239,6 +241,7 @@ export const useMainStore = defineStore('main', {
             try {
                 console.log("store", updatedCurrentHero);
                 const updated_hero = await updateHero(updatedCurrentHero);
+
                 if (!updated_hero.error || updated_hero.error === 0) {
                     console.log(updated_hero.data);
                     this.currentHero = updated_hero.data;

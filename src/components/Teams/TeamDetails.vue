@@ -16,10 +16,13 @@
           <ion-item-divider></ion-item-divider>
           <h3>Héros</h3>
 
+          <!-- Appel au composant AddHeroesToTeam -->
           <AddHeroesToTeam />
+
+          <!-- Appel au composant CreateHeroToTeam -->
           <CreateHeroToTeam />
 
-          <ion-button color="danger" @click="toggleSelectionMode">Supprimer des héros</ion-button>
+          <EditHeroesToTeam  @hero-updated="loadTeamMembers"  ref="editHeroDialog" > </EditHeroesToTeam>
 
           <ion-list>
             <ion-item v-for="hero in teamMembersDetails" :key="hero._id" lines="full">
@@ -27,17 +30,15 @@
                 <h2>{{ hero.publicName }}</h2>
                 <p>Prénom réel: {{ hero.realName }}</p>
               </ion-label>
-              <ion-button slot="end" fill="outline" @click="selectHero(hero)">Modifier</ion-button>
+              <ion-button slot="end" fill="outline" @click="openEditDialog(hero)">Modifier</ion-button>
+              <ion-button color="danger" @click="prepareToDelete(hero)">Supprimer</ion-button>
             </ion-item>
           </ion-list>
-
-          <EditHeroesToTeam :hero="selectedHero" @reloadMembers="loadTeamMembers" />
         </ion-card-content>
       </ion-card>
     </ion-content>
   </ion-page>
 </template>
-
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
@@ -46,16 +47,14 @@ import { useSecretStore } from '@/store/secret';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItemDivider, IonList, IonItem, IonLabel, IonButton } from '@ionic/vue';
 import AddHeroesToTeam from "@/components/Teams/AddHeroesToTeam.vue";
 import CreateHeroToTeam from "@/components/Teams/CreateHeroToTeam.vue";
-import EditHeroesToTeam from "@/components/Teams/EditHeroesToTeam.vue";
 import { getHeroById } from "@/services/hero.services";
-import {storeToRefs} from "pinia";
+import { storeToRefs } from "pinia";
+import EditHeroesToTeam from "@/components/Teams/EditHeroesToTeam.vue";
 
 const mainStore = useMainStore();
 const secretStore = useSecretStore();
 const { currentTeam } = storeToRefs(mainStore);
 const teamMembersDetails = ref([]);
-const selectedHero = ref(null);
-const isSelectionMode = ref(false);
 
 const loadTeamMembers = async () => {
   teamMembersDetails.value = [];
@@ -75,12 +74,15 @@ onMounted(loadTeamMembers);
 
 watch(currentTeam, loadTeamMembers, { deep: true });
 
-const toggleSelectionMode = () => {
-  isSelectionMode.value = !isSelectionMode.value;
+
+
+const openEditDialog = async (hero) => {
+  await mainStore.setCurrentHero(hero)
 };
 
-const selectHero = (hero) => {
-  selectedHero.value = hero;
-  // Logic to open edit hero dialog here
+const prepareToDelete = async (hero) => {
+  await mainStore.removeHeroesFromCurrentTeam([hero._id]);
+  this.$refs.editHeroDialog.openDialog(); // Ouvrez le dialogue d'édition
+
 };
 </script>

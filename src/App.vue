@@ -54,9 +54,16 @@
           <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
           </ion-buttons>
-          <ion-title>Heroes & Vilains</ion-title>
-        </ion-toolbar>
+          <div class="title-container">
+            <div class="title-left">
+              <ion-title>Heroes & Vilains</ion-title>
+            </div>
 
+            <div class="title-right" v-if="auth">
+              <ion-title>{{ getUserInfoName }}</ion-title>
+            </div>
+          </div>
+        </ion-toolbar>
       </ion-header>
 
       <ion-content>
@@ -76,7 +83,7 @@ import { storeToRefs } from 'pinia';
 
 const router = useRouter();
 const secretStore = useSecretStore();
-const { auth } = storeToRefs(secretStore); // Cela permet à `auth` de rester réactif
+const { auth, getUserInfoName} = storeToRefs(secretStore); // Cela permet à `auth` de rester réactif
 
 
 const logout = async () => {
@@ -88,3 +95,26 @@ const navigateTo = (routeName) => {
 };
 </script>
 
+<style scoped>
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.title-left {
+  flex: 1;
+}
+
+.title-right{
+  color: red;
+  flex: 1;
+
+}
+
+/* Ceci centre le titre si le nom de l'utilisateur n'est pas présent */
+.title-right:empty {
+  display: none;
+}
+</style>
