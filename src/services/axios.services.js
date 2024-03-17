@@ -1,23 +1,24 @@
 import axios from 'axios'
-import { useSecretStore } from '@/store/secret'; // Assurez-vous que le chemin est correct
+import { useSecretStore } from '@/store/secret';
 import { useMainStore } from '@/store/main'; // Assurez-vous que le chemin est correct
 import Config from "@/commons/config";
 
 const axiosAgent = axios.create({
-  baseURL: Config.urlAPI,
+  baseURL: "https://apidemo.iut-bm.univ-fcomte.fr",
   withCredentials : true,
 });
 
 axiosAgent.interceptors.request.use(config => {
   // Récupération de la phrase secrète directement depuis le store Vuex
 
-  /*
-  const secretPhrase = store.state.secret.passwordOrg;
-  const xsrfToken = store.state.secret.xsrfToken; // Assurez-vous que le chemin d'accès est correct
+  const secretStore = useSecretStore();
+  const passwordOrg = secretStore.passwordOrg;
 
-  if (secretPhrase) {
-    config.headers['org-secret'] = secretPhrase;
+  if (passwordOrg) {
+    config.headers['org-secret'] = passwordOrg;
   }
+
+  /*
 
   if (xsrfToken) {
     config.headers['x-xsrf-token'] = xsrfToken;

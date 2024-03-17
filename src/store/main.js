@@ -103,8 +103,13 @@ export const useMainStore = defineStore('main', {
         },
 
         async addTeamToCurrentOrg(newTeamToCurrentOrg) {
+
             try {
-                await addTeamToOrg(newTeamToCurrentOrg._id);
+                console.log("store")
+
+                console.log(newTeamToCurrentOrg)
+
+                await addTeamToOrg(newTeamToCurrentOrg);
 
                 const currentOrg = await getOrgById(this.currentOrg._id);
 
