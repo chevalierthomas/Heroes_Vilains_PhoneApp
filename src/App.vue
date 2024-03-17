@@ -8,6 +8,7 @@
       </ion-header>
       <ion-content>
         <ion-list>
+
           <ion-item button :router-link="{ name: 'org' }">
             <ion-label>Organisations</ion-label>
           </ion-item>
@@ -36,6 +37,8 @@
         </ion-list>
       </ion-content>
     </ion-menu>
+
+
     <div class="ion-page" id="main-content">
       <ion-header :translucent="true">
         <ion-toolbar>
@@ -44,17 +47,20 @@
           </ion-buttons>
           <ion-title>Heroes & Vilains</ion-title>
         </ion-toolbar>
+
       </ion-header>
 
       <ion-content>
-        <router-view />
+
+        <router-view/>
+
       </ion-content>
     </div>
   </ion-app>
 </template>
 
 <script setup>
-import { IonApp, IonHeader, IonToolbar, IonTitle, IonContent, IonMenu, IonList, IonItem, IonLabel, IonMenuButton } from '@ionic/vue';
+import { IonApp, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent, IonMenu, IonList, IonItem, IonLabel, IonMenuButton,IonPage } from '@ionic/vue';
 import { useSecretStore } from '@/store/secret.js';
 import { useMainStore } from '@/store/main';
 import { storeToRefs } from 'pinia';

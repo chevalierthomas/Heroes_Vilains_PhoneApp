@@ -1,5 +1,6 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
+import { createRouter, createWebHistory } from 'vue-router';
+
+import HomeView from "@/views/HomeView.vue";
 import OrgListView from "@/views/Orgs/OrgListView.vue";
 import OrgView from "@/views/Orgs/OrgView.vue";
 import TeamView from "@/views/Teams/TeamView.vue";
@@ -12,7 +13,7 @@ import LoginView from "@/views/LoginView.vue";
 import UserAccountView from "@/views/UserAccount.vue";
 import RegisterView from "@/views/RegisterView.vue";
 
-const routes: Array<RouteRecordRaw> = [
+const routes = [
   {
     path: '/',
     name: 'home',
@@ -46,10 +47,10 @@ const routes: Array<RouteRecordRaw> = [
         path: 'details',
         name: 'orgDetails',
         component: OrgDetailsView,
-        meta: { levelAuth: 1 },
       }
     ]
   },
+
   {
     path: '/team',
     component: TeamView,
@@ -63,7 +64,6 @@ const routes: Array<RouteRecordRaw> = [
         path: 'details',
         name: 'teamDetails',
         component: TeamDetailsView,
-        meta: { levelAuth: 1 },
       }
     ]
   },
@@ -88,11 +88,7 @@ const routes: Array<RouteRecordRaw> = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
-});
-
-router.beforeEach((to, from, next) => {
-  // Votre logique de navigation ici
+  routes,
 });
 
 export default router;

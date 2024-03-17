@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { getUserInfo, registerUser, signIn, updateHeroWithAuth } from "@/services/auth.services";
 
-export const useSecretStore = defineStore('main', {
+export const useSecretStore = defineStore('secret', {
     state: () => ({
         passwordOrg: "baba",
         auth: false,
